@@ -22,10 +22,10 @@ const createOrder = async (req: Request, res: Response) => {
         data: result,
       });
     };
-  } catch (err: any) {
+  } catch (err) {
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
+      message: "Something went wrong",
       error: err,
     });
   }
@@ -55,7 +55,7 @@ const retrieveSingleOrderById = async (req: Request, res: Response) => {
       message: "Order is retrieved successfully",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
   }
 };

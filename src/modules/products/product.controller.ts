@@ -16,10 +16,10 @@ const createProduct = async (req: Request, res: Response) => {
       message: "Product created successfully!",
       data: result,
     });
-  }catch(err: any){
+  }catch(err){
     res.status(500).json({
       success: false,
-      message: err.message || "Something went wrong",
+      message: "Something went wrong",
       error: err,
     });
   }
@@ -36,7 +36,7 @@ const retrieveAllProducts = async (req: Request, res: Response) => {
       message: "Products are retrieved successfully",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
   }
 };
@@ -51,7 +51,7 @@ const retrieveSingleProductById = async (req: Request, res: Response) => {
       message: "Product is retrieved successfully",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
   }
 };
@@ -66,7 +66,7 @@ const deleteProductById = async (req: Request, res: Response) => {
       message: "Product is deleted successfully",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
   }
 };
@@ -82,7 +82,7 @@ const updateProductById = async (req: Request, res: Response) => {
       message: "Product is updated successfully",
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
     console.log(err);
   }
 };
