@@ -10,6 +10,7 @@ const createOrder = async (orderLoad: TOrder) => {
 
 // Retrieve all orders
 const retrieveAllOrdersFromDB = async (email: string) => {
+  
   // Retrieve specific product with email
 
   const result = await Order.find(

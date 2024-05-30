@@ -5,7 +5,7 @@ const createProduct = async (payLoad: TProduct) => {
   const result = await Product.create(payLoad);
   return result;
 };
-const retrieveAllProductsFromDB = async (search?: string) => {
+const retrieveAllProductsFromDB = async (search ?: string) => {
   const result = await Product.find(
     search === null
       ? {}

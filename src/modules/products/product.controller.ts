@@ -1,15 +1,29 @@
 import { Request, Response } from "express";
 import { ProductServices } from "./product.service";
+import productValidationSchema from "./product.validation";
 
 // Creating a new product
 const createProduct = async (req: Request, res: Response) => {
-  const productData = req.body;
-  const result = await ProductServices.createProduct(productData);
-  res.json({
-    success: true,
-    message: "Product created successfully!",
-    data: result,
-  });
+  try{
+
+    const productData = req.body;
+
+    const zodParseData = productValidationSchema.parse(productData);
+  
+    const result = await ProductServices.createProduct(zodParseData);
+    res.status(200).json({
+      success: true,
+      message: "Product created successfully!",
+      data: result,
+    });
+  }catch(err: any){
+    res.status(500).json({
+      success: false,
+      message: err.message || "Something went wrong",
+      error: err,
+    });
+  }
+
 };
 
 // Retrieve All Products
@@ -45,6 +59,7 @@ const retrieveSingleProductById = async (req: Request, res: Response) => {
 const deleteProductById = async (req: Request, res: Response) => {
   try {
     const { productId } = req.params;
+    
     const result = await ProductServices.deleteProductFromDB(productId);
     res.status(200).json({
       success: true,
