@@ -1,5 +1,6 @@
 import { Order } from "./order.model";
 import { TOrder } from "./order.interface";
+import { Product } from "../products/product.model";
 
 
 // Creating order
@@ -29,14 +30,34 @@ const retrieveSingleOrderByIdFromDB = async (id: string) => {
   return result;
 }
 
-// const calculation = async(id: string) => {
-//   const result = await Order.findOne({id});
-//   return result;
-// } 
+const handleProductInventory = async (order: TOrder) => {
+  const product = await Product.findOne({ _id: order.productId });
+  if (product) {
+    if (product.inventory.quantity >= order.quantity) {
+      product.inventory.quantity -= order.quantity;
+      product.inventory.inStock =
+        product.inventory.quantity - order.quantity == 0 ? false : true;
+      await product.save();
+      return {
+        success: true,
+      };
+    } else {
+      return {
+        success: false,
+        error: 'Insufficient quantity available in inventory!',
+      };
+    }
+  } else {
+    return {
+      success: false,
+      error: 'Entered product Id is not valid!',
+    };
+  }
+};
 
 export const OrderServices = {
   createOrder,
   retrieveAllOrdersFromDB,
   retrieveSingleOrderByIdFromDB,
-  // calculation
+  handleProductInventory,
 };
