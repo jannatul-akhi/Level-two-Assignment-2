@@ -1,24 +1,27 @@
 import { Request, Response } from "express";
 import { OrderServices } from "./order.service";
-// import { Order } from "./order.model";
-import { z } from "zod";
 import orderValidationSchema from "./order.validation";
 
 // Creating a new order
 const createOrder = async (req: Request, res: Response) => {
   try {
     // Creating schema validation using Zod
-
     const orderData = req.body;
     const zodParsedData = orderValidationSchema.parse(orderData);
 
-    const result = await OrderServices.createOrder(zodParsedData);
+    const manageInventory = await OrderServices.handleProductInventory(orderData);
 
-    res.json({
-      success: true,
-      message: "Order created successfully!",
-      data: result,
-    });
+    if (!manageInventory.success) {
+      res.status(200).json(manageInventory);
+    } else {
+      const result = await OrderServices.createOrder(zodParsedData);
+  
+      res.json({
+        success: true,
+        message: "Order created successfully!",
+        data: result,
+      });
+    };
   } catch (err: any) {
     res.status(500).json({
       success: false,
@@ -26,15 +29,13 @@ const createOrder = async (req: Request, res: Response) => {
       error: err,
     });
   }
-};
-
+}
 // Retrieving all orders
 const retrieveAllOrders = async (req: Request, res: Response) => {
   const { email } = req.query;
   const result = await OrderServices.retrieveAllOrdersFromDB(
     (email as string) ?? null
   );
-  console.log(result)
   res.json({
     success: true,
     message: "Orders are retrieved successfully!",
